@@ -13,9 +13,13 @@ type MainController struct {
 }
 // @router / [get]
 func (c *MainController) Index() {
+
+	models.InitDb();
+
+
 	c.Data["Website"] = "beego.me"
 	c.Data["Email"] = "astaxie@gmail.com"
-	c.TplName = "index.tpl"
+	c.TplName = "index.html"
 }
 
 // @router /init [get]
@@ -56,7 +60,7 @@ func (c *MainController) Quiz() {
 
 	c.Data["Website"] = quiz.User.Email
 	c.Data["Email"] = quiz.User.Email
-	c.TplName = "index.tpl"
+	c.TplName = "quiz.tpl"
 }
 
 

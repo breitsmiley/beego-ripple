@@ -1,0 +1,13 @@
+h4 {
+    margin-top: 25px;
+}
+
+hr {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.mr-cat-wrapper {
+    display: none;
+    position: fixed;
+}
