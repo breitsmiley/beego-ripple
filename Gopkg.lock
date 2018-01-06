@@ -30,6 +30,12 @@
   version = "v4.2.1"
 
 [[projects]]
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  revision = "ed69081a91fd053f17672236b0dd52ba7485e1a3"
+  version = "v1.4.0"
+
+[[projects]]
   name = "github.com/smartystreets/assertions"
   packages = [
     ".",
@@ -49,9 +55,15 @@
   revision = "9e8dc3f972df6c8fcc0375ef492c24d0bb204857"
   version = "1.6.3"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "42fe2e1c20de1054d3d30f82cc9fb5b41e2e3767"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9e242ef2da883faa526d0301106c1de8202a8b14eecebf2470863a2e60ea195b"
+  inputs-digest = "e956ed340b51f72f7ee3c74950c8b65442ee0879501191dd9b3984b38f2ff742"
   solver-name = "gps-cdcl"
   solver-version = 1
