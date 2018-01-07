@@ -67,3 +67,4 @@ fabric.properties
 /vendor/
 /lastupdate.tmp
 /database/ripple.db
+beego-ripple
