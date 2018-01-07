@@ -1,19 +1,48 @@
 package tasks
 
+// https://myaccount.google.com/lesssecureapps
+
 import (
 	"fmt"
 	//"time"
+	//"net/mail"
+
 	"github.com/astaxie/beego/toolbox"
+	"beego-ripple/utils"
 	//"beego-ripple/models"
+	//"log"
+	//"net/smtp"
 )
 
 const TASK_SEND_QUIZ_EMAIL  = "send_quiz_email"
 
 func init() {
+
+	utils.MailSend("breitsmiley@gmail.com", "Subject GO mailer test 2018", "GO mailer test 2018 body")
+
+
 	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0/5 * * * * *", func() error {
 		// this task will run every 30 seconds
 
 		fmt.Println("Task send_quiz_email")
+		//
+		////smtp.
+		//
+		//
+		//// Set up authentication information.
+		//auth := smtp.PlainAuth("", "user@example.com", "password", "mail.example.com")
+		//
+		//// Connect to the server, authenticate, set the sender and recipient,
+		//// and send the email all in one step.
+		//to := []string{"recipient@example.net"}
+		//msg := []byte("To: recipient@example.net\r\n" +
+		//	"Subject: discount Gophers!\r\n" +
+		//	"\r\n" +
+		//	"This is the email body.\r\n")
+		//err := smtp.SendMail("mail.example.com:25", auth, "sender@example.org", to, msg)
+		//if err != nil {
+		//	log.Fatal(err)
+		//}
 
 		//models.InitDb()
 		//campaigns, err := models.GetFinishedCampaigns()
