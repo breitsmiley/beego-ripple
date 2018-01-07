@@ -12,7 +12,6 @@ func init() {
 }
 
 func RandomString(strlen int) string {
-	return "qwe"
 	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
 	result := ""
 	for i := 0; i < strlen; i++ {

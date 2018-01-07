@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/static/favicon.ico">
 
-    <title>Total Recall</title>
+    <title>FAIL</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -22,26 +22,25 @@
 
 </head>
 
-<body>
+<body class="body-fail">
+<div class="rain">
     <div class="container">
         <div class="page-header">
-            <h1>Total Recall <span id="h1-end" style="visibility: hidden;">|</span></h1>
-            <div class="mr-cat-wrapper">
-                <img src="/static/img/mr-cat.png">
-            </div>
+            <h1>Total Recall - FAIL</h1>
         </div>
 
         <h3>Progress</h3>
         <div class="media">
             <div class="media-body">
-            <h4 class="media-heading"><img src="/static/img/picard.png" alt="leia" class="img-thumbnail" width="64" height="64"></h4>
+            <h4 class="media-heading"><img src="/static/img/{{if eq .fail.User.Email .user1 }}picard-fail.png{{else}}picard.png{{end}}" alt="picard" class="img-thumbnail" width="64" height="64"></h4>
                 <div class="progress">
                     <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
                          aria-valuenow="{{.data.Pb1.Percent}}" aria-valuemin="0" aria-valuemax="{{.data.Pb1.Percent}}%" style="min-width: 2em;width: {{.data.Pb1.Percent}}%;">
                     {{.data.Pb1.Percent}}%
                     </div>
                 </div>
-                <h4 class="media-heading"><img src="/static/img/leia.png" alt="leia" class="img-thumbnail" width="64" height="64"></h4>
+                {{/*{{config "String" "user1" "asd"}}*/}}
+                <h4 class="media-heading"><img src="/static/img/{{if eq .fail.User.Email .user2 }}leia-fail.png{{else}}leia.png{{end}}" alt="picard" class="img-thumbnail" width="64" height="64"></h4>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped active" role="progressbar"
                          aria-valuenow="{{.data.Pb2.Percent}}" aria-valuemin="0" aria-valuemax="{{.data.Pb2.Percent}}%" style="min-width: 2em;width: {{.data.Pb2.Percent}}%;">
@@ -51,11 +50,12 @@
             </div>
             <div class="media-right media-middle">
                 <a href="#">
-                    <img class="media-object" src="/static/img/elk-self.gif" alt="elk" width="192" height="192">
+                    {{/*<img class="media-object" src="/static/img/elk-self.gif" alt="elk" width="192" height="192">*/}}
                 </a>
             </div>
 
         </div>
     </div>
+</div>
 </body>
 </html>

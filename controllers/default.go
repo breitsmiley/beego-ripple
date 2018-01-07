@@ -3,26 +3,37 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"beego-ripple/models"
-	//"api/models"
-	//"fmt"
 	"fmt"
 )
 
 type MainController struct {
 	beego.Controller
 }
+
 // @router / [get]
 func (c *MainController) Index() {
 
-	models.InitDb();
+	data, err := models.GetQuizViewData()
 
-
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
+	if err != nil {
+		fmt.Println(err)
+		c.Abort("403")
+	}
+	c.Data["data"] = &data
 	c.TplName = "index.html"
+
+	failQuiz, _ := models.FindFailQuiz()
+	if failQuiz != nil {
+		fmt.Println(failQuiz.User)
+		c.Data["fail"] = &failQuiz
+		c.Data["user1"] = beego.AppConfig.String("user1")
+		c.Data["user2"] = beego.AppConfig.String("user2")
+		c.TplName = "fail.html"
+	}
+
 }
 
-// @router /init [get]
+// @router /init/hde15knQw [get]
 func (c *MainController) InitDb() {
 
 	models.InitDb();
@@ -30,8 +41,12 @@ func (c *MainController) InitDb() {
 	c.Redirect(c.URLFor("MainController.Index"), 302)
 }
 
-// @router /quiz/:id/:slug [get]
+// @router /quiz/:id/:slug [post,get]
 func (c *MainController) Quiz() {
+
+	// Common for GET and POST
+	//-----------------------
+	c.TplName = "quiz.tpl"
 
 	//slug := c.Ctx.Input.Param(":slug")
 	//id := c.Ctx.Input.Param(":id")
@@ -45,48 +60,32 @@ func (c *MainController) Quiz() {
 	slug := c.GetString(":slug")
 
 
-	fmt.Println(id)
-	fmt.Println(slug)
+	failQuiz, _ := models.FindFailQuiz()
+	if failQuiz != nil {
+		c.Redirect(c.URLFor("MainController.Index"), 302)
+	}
 
-
-	quiz , err := models.FindNewQuiz(id, slug);
-
+	quiz , err := models.FindActiveQuiz(id, slug);
 	if err != nil {
 		fmt.Println(err)
-		//return quiz, err
 		c.Redirect(c.URLFor("MainController.Index"), 302)
 	}
 
 
-	c.Data["Website"] = quiz.User.Email
-	c.Data["Email"] = quiz.User.Email
-	c.TplName = "quiz.tpl"
+	// Common for GET and POST
+	//-----------------------
+	if (c.Ctx.Request.Method == "POST") {
+
+		btn := c.GetString("btn")
+
+		status := models.QUIZ_STATUS_OK
+		if (btn == "no") {
+			status = models.QUIZ_STATUS_FAIL
+		}
+
+
+		models.UpdateQuizStatus(quiz, status)
+
+		c.Redirect(c.URLFor("MainController.Index"), 302)
+	}
 }
-
-
-//// @router /quiz/:id/:slug [get]
-//func (c *MainController) Quiz(id int, slug string) {
-//
-//	fmt.Println(id)
-//	fmt.Println(slug)
-//
-//	//slug := c.Ctx.Input.Param(":slug")
-//	//id := c.Ctx.Input.Param(":id")
-//
-//	quiz , err := models.FindNewQuiz(id, slug);
-//
-//	if err != nil {
-//		fmt.Println(err)
-//		//return quiz, err
-//		c.Redirect(c.URLFor("MainController.Index"), 302)
-//	}
-//
-//	//c.Redirect(c.URLFor("MainController.Index"), 302)
-//
-//	c.Data["Website"] = quiz.User.Email
-//	c.Data["Email"] = quiz.User.Email
-//	c.TplName = "index.tpl"
-//
-//
-//	c.Render()
-//}

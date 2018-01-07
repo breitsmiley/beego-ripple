@@ -29,17 +29,57 @@ $(function () {
 
         init: function () {
 
-            setInterval(function () {
-                if(catHelper.$mrCat.is(':hidden')) {
-                    catHelper.initSettings();
-                }
-                catHelper.$mrCat.fadeToggle(5000,"linear");
-            }, 7000);
+            if ( this.$mrCat.length
+                &&  this.$h1End.length
+                &&  this.$h1.length
+            ) {
+                setInterval(function () {
+                    if(catHelper.$mrCat.is(':hidden')) {
+                        catHelper.initSettings();
+                    }
+                    catHelper.$mrCat.fadeToggle(5000,"linear");
+                }, 7000);
 
+            }
         }
     };
 
     catHelper.init();
+
+
+
+
+    var quizFormHelper = {
+        $yesBtn: $("#yesBtn"),
+        $noBtn: $("#noBtn"),
+        $enableNoBtnCheckbox: $("#enableNoBtnCheckbox"),
+
+
+        init: function () {
+            if ( this.$yesBtn.length
+                &&  this.$noBtn.length
+                &&  this.$enableNoBtnCheckbox.length
+            ) {
+
+                this.$enableNoBtnCheckbox.on("click", function (e) {
+
+                    quizFormHelper.$noBtn.prop( "disabled",
+                        !quizFormHelper.$noBtn.is(":disabled")
+                    );
+
+                });
+
+
+
+
+
+
+
+            }
+        }
+    };
+
+    quizFormHelper.init();
 
 });
 

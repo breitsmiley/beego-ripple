@@ -18,7 +18,7 @@ func init() {
 	beego.GlobalControllerRouter["beego-ripple/controllers:MainController"] = append(beego.GlobalControllerRouter["beego-ripple/controllers:MainController"],
 		beego.ControllerComments{
 			Method: "InitDb",
-			Router: `/init`,
+			Router: `/init/hde15knQw`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -27,7 +27,7 @@ func init() {
 		beego.ControllerComments{
 			Method: "Quiz",
 			Router: `/quiz/:id/:slug`,
-			AllowHTTPMethods: []string{"get"},
+			AllowHTTPMethods: []string{"post","get"},
 			MethodParams: param.Make(),
 			Params: nil})
 
