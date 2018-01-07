@@ -1,11 +1,11 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
-	_ "github.com/mattn/go-sqlite3"
 	"fmt"
-	"beego-ripple/utils"
+	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
+	_ "github.com/mattn/go-sqlite3"
+	"beego-ripple/utils"
 )
 
 const QUIZ_STATUS_NEW  = 0

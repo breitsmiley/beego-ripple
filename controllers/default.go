@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/astaxie/beego"
 	"beego-ripple/models"
-	"fmt"
 )
 
 type MainController struct {

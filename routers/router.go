@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"beego-ripple/controllers"
 	"github.com/astaxie/beego"
+	"beego-ripple/controllers"
 )
 
 func init() {
