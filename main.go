@@ -7,6 +7,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	_ "beego-ripple/routers"
 	//_ "beego-ripple/models"
+	_ "beego-ripple/tasks"
+	"github.com/astaxie/beego/toolbox"
+	//"beego-ripple/tasks"
 )
 
 
@@ -52,5 +55,6 @@ func main() {
 
 	beego.Run()
 
+	defer toolbox.StopTask()
 }
 
