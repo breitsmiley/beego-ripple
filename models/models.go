@@ -166,7 +166,6 @@ func getProgressBarData(user User) (quizList []*Quiz, err error) {
 	}
 
 	return quizList, nil
-
 }
 
 type ProgressBarData struct {
@@ -194,6 +193,70 @@ func prepareProgressBarData(quizList []*Quiz) (data *ProgressBarData) {
 
 }
 
+func activateQuizForUser (user User) (quiz *Quiz, err error) {
+	o := orm.NewOrm()
+
+	quiz = new(Quiz)
+
+	qs := o.QueryTable("quiz").
+		Filter("user", user).
+		Filter("status", QUIZ_STATUS_NEW).
+		RelatedSel()
+
+	err = qs.One(quiz)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	quiz.Status = QUIZ_STATUS_ACTIVE
+	if num, err := o.Update(quiz); err == nil {
+		fmt.Println(num)
+	}
+
+	return quiz, nil
+
+}
+
+func ActivateQuizForUsers() (quizList []*Quiz) {
+	o := orm.NewOrm()
+
+	user1 := User{Email: beego.AppConfig.String("user1")}
+
+
+	err1 := o.Read(&user1, "Email")
+	if err1 == nil  {
+		quiz1, err := activateQuizForUser(user1)
+		if quiz1 != nil {
+			fmt.Println(err)
+			fmt.Println(quiz1)
+			quizList = append(quizList, quiz1)
+		}
+	}
+
+	user2 := User{Email: beego.AppConfig.String("user2")}
+	err2 := o.Read(&user2, "Email")
+	if err2 == nil  {
+		//fmt.Println(err2)
+		//return nil, err2
+
+		quiz2, err := activateQuizForUser(user2)
+
+		if quiz2 != nil {
+			fmt.Println(err)
+			fmt.Println(quiz2)
+			quizList = append(quizList, quiz2)
+		}
+	}
+
+	if len(quizList) == 0 {
+		return nil
+	}
+
+	return quizList
+
+}
 
 func GetQuizViewData() (data *QuizViewData, err error){
 

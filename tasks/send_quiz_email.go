@@ -1,79 +1,111 @@
 package tasks
 
 // https://myaccount.google.com/lesssecureapps
+// https://medium.com/@dhanushgopinath/sending-html-emails-using-templates-in-golang-9e953ca32f3d
 
 import (
 	"fmt"
-	//"time"
-	//"net/mail"
-
+	"html/template"
 	"github.com/astaxie/beego/toolbox"
 	"beego-ripple/utils"
-	//"beego-ripple/models"
-	//"log"
-	//"net/smtp"
+	"bytes"
+	"time"
+	"github.com/astaxie/beego"
+	"beego-ripple/models"
 )
 
 const TASK_SEND_QUIZ_EMAIL  = "send_quiz_email"
 
+
+type QuizTplData struct {
+	AppSiteName string
+	AppSiteSchema string
+	AppSiteURL  string
+	Time  string
+	QuizURL  string
+}
+
 func init() {
 
-	utils.MailSend("breitsmiley@gmail.com", "Subject GO mailer test 2018", "GO mailer test 2018 body")
 
-
-	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0/5 * * * * *", func() error {
-		// this task will run every 30 seconds
-
-		fmt.Println("Task send_quiz_email")
-		//
-		////smtp.
-		//
-		//
-		//// Set up authentication information.
-		//auth := smtp.PlainAuth("", "user@example.com", "password", "mail.example.com")
-		//
-		//// Connect to the server, authenticate, set the sender and recipient,
-		//// and send the email all in one step.
-		//to := []string{"recipient@example.net"}
-		//msg := []byte("To: recipient@example.net\r\n" +
-		//	"Subject: discount Gophers!\r\n" +
-		//	"\r\n" +
-		//	"This is the email body.\r\n")
-		//err := smtp.SendMail("mail.example.com:25", auth, "sender@example.org", to, msg)
-		//if err != nil {
-		//	log.Fatal(err)
-		//}
-
-		//models.InitDb()
-		//campaigns, err := models.GetFinishedCampaigns()
-		//if err != nil {
-		//	fmt.Println("Could not load finished campaigns with error:", err)
-		//	return err
-		//}
-		//
-		//if len(campaigns) == 0 {
-		//	fmt.Println("No campaigns finished yet. Exiting.")
-		//	return nil
-		//}
-		//
-		//for _, campaign := range campaigns {
-		//	result, err := models.SendCampaignNotification(campaign)
-		//	if err != nil {
-		//		fmt.Printf("\nCampaign %d could not be notified!\n", campaign.Id)
-		//	}
-		//
-		//	if result {
-		//		fmt.Printf("\nCampaign %d was notified!\n", campaign.Id)
-		//	}
-		//}
-		//
-		//fmt.Printf("\nNotification task ran at: %s\n", time.Now())
+	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0/10 * * * * *", func() error {
+		//sendQuizEmailToAll()
 		return nil
 	})
 
 	toolbox.AddTask(TASK_SEND_QUIZ_EMAIL, first_task)
 	toolbox.StartTask()
 
-
-	//defer toolbox.StopTask()
 }
+
+func sendQuizEmailToAll() {
+
+	fmt.Println("Task send_quiz_email")
+
+	appSiteName := beego.AppConfig.String("app_site_name")
+	appSiteSchema := beego.AppConfig.String("app_site_schema")
+	appSiteURL := beego.AppConfig.String("app_site_url")
+
+	quizList := models.ActivateQuizForUsers()
+
+	if quizList == nil {
+		fmt.Println("Empty quiz list to mailing")
+		return
+	}
+
+	for i := 0; i < len(quizList) ; i++ {
+
+		data := new(QuizTplData)
+		data.AppSiteName = appSiteName
+		data.AppSiteSchema = appSiteSchema
+		data.AppSiteURL = appSiteURL
+		data.Time = time.Now().Local().Format("02.01.2006 15:04")
+		data.QuizURL = appSiteURL + beego.URLFor(
+			"MainController.Quiz",
+			":id", quizList[i].Id,
+			":slug", quizList[i].Slug)
+
+		fmt.Println(data)
+
+		to := []string{quizList[i].User.Email}
+		sendQuizToEmail(to, data)
+	}
+
+}
+
+func renderEmailQuizTpl(data interface{}) (tplText string, err error) {
+	t, err := template.ParseFiles("views/email_quiz.html")
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
+	buf := new(bytes.Buffer)
+	if err = t.Execute(buf, data); err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
+	return buf.String(), nil
+}
+
+func sendQuizToEmail(to []string, data *QuizTplData) {
+	sender := utils.GetSender()
+
+	subject := "Ripple.Quiz - It's time to make your choice - " + data.Time
+
+	message, err := renderEmailQuizTpl(data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	body := sender.WriteHTMLEmail(to, subject, message)
+
+	sender.SendMail(to, body)
+}
+
+
+
+
+
