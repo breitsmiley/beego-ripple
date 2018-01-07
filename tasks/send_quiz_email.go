@@ -28,8 +28,8 @@ type QuizTplData struct {
 func init() {
 
 
-	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0/10 * * * * *", func() error {
-		//sendQuizEmailToAll()
+	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 2 * * *", func() error {
+		sendQuizEmailToAll()
 		return nil
 	})
 
