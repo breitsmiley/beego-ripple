@@ -108,7 +108,7 @@ func FindFailQuiz() (quiz *Quiz, err error) {
 func fillQuizForUser(user * User)  {
 	o := orm.NewOrm()
 
-	for i := 0; i < 6; i++ {
+	for i := 0; i < 10; i++ {
 
 		quiz := new(Quiz)
 		quiz.User = user
