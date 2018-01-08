@@ -11,6 +11,4 @@ func init() {
     //beego.Router("/quiz/:slug", &controllers.MainController{}, "get:Quiz")
 
 	beego.Include(&controllers.MainController{})
-
-
 }

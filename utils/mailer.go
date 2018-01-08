@@ -42,13 +42,10 @@ func (sender Sender) SendMail(to []string, body string) {
 		sender.User, to, []byte(body))
 
 	if err != nil {
-		//log.Printf("smtp error: %s", err)
-		fmt.Printf("smtp error: %s", err)
+		//fmt.Printf("smtp error: %s", err)
+		beego.Warn("smtp error", err)
 		return
 	}
-
-	// todo
-	//log.Print("sent, visit http://foobarbazz.mailinator.com")
 }
 
 

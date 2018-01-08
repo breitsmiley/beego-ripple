@@ -4,7 +4,7 @@ package tasks
 // https://medium.com/@dhanushgopinath/sending-html-emails-using-templates-in-golang-9e953ca32f3d
 
 import (
-	"fmt"
+	//"fmt"
 	"html/template"
 	"github.com/astaxie/beego/toolbox"
 	"beego-ripple/utils"
@@ -26,8 +26,10 @@ type QuizTplData struct {
 }
 
 func init() {
-	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 0 5 */1 * *", func() error {
-		sendQuizEmailToAll()
+	// 0 0 8 10 * *
+	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 0 */1 * * *", func() error {
+
+			sendQuizEmailToAll()
 		return nil
 	})
 
@@ -38,7 +40,7 @@ func init() {
 
 func sendQuizEmailToAll() {
 
-	fmt.Println("Task send_quiz_email")
+	beego.Info("Start Task - send_quiz_email");
 
 	appSiteName := beego.AppConfig.String("app_site_name")
 	appSiteSchema := beego.AppConfig.String("app_site_schema")
@@ -47,7 +49,7 @@ func sendQuizEmailToAll() {
 	quizList := models.ActivateQuizForUsers()
 
 	if quizList == nil {
-		fmt.Println("Empty quiz list to mailing")
+		beego.Info("Empty quiz list to mailing");
 		return
 	}
 
@@ -63,7 +65,7 @@ func sendQuizEmailToAll() {
 			":id", quizList[i].Id,
 			":slug", quizList[i].Slug)
 
-		fmt.Println(data)
+		beego.Info("Mail send: ", data);
 
 		to := []string{quizList[i].User.Email}
 		sendQuizToEmail(to, data)
@@ -74,13 +76,13 @@ func sendQuizEmailToAll() {
 func renderEmailQuizTpl(data interface{}) (tplText string, err error) {
 	t, err := template.ParseFiles("views/email_quiz.html")
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return "", err
 	}
 
 	buf := new(bytes.Buffer)
 	if err = t.Execute(buf, data); err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return "", err
 	}
 
@@ -94,7 +96,7 @@ func sendQuizToEmail(to []string, data *QuizTplData) {
 
 	message, err := renderEmailQuizTpl(data)
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return
 	}
 

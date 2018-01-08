@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"beego-ripple/models"
 )
@@ -16,15 +15,14 @@ func (c *MainController) Index() {
 	data, err := models.GetQuizViewData()
 
 	if err != nil {
-		fmt.Println(err)
-		c.Abort("403")
+		beego.Warn(err)
+		c.Abort("503")
 	}
 	c.Data["data"] = &data
 	c.TplName = "index.html"
 
 	failQuiz, _ := models.FindFailQuiz()
 	if failQuiz != nil {
-		fmt.Println(failQuiz.User)
 		c.Data["fail"] = &failQuiz
 		c.Data["user1"] = beego.AppConfig.String("user1")
 		c.Data["user2"] = beego.AppConfig.String("user2")
@@ -53,7 +51,7 @@ func (c *MainController) Quiz() {
 
 	id, err := c.GetInt(":id")
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		c.Redirect(c.URLFor("MainController.Index"), 302)
 	}
 
@@ -67,7 +65,7 @@ func (c *MainController) Quiz() {
 
 	quiz , err := models.FindActiveQuiz(id, slug);
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		c.Redirect(c.URLFor("MainController.Index"), 302)
 	}
 

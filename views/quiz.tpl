@@ -25,7 +25,7 @@
 <body>
 <div class="container">
     <div class="page-header">
-        <h1>Choose Your Destiny!</h1>
+        <h1>Choose Your Destiny!</a></h1>
         <p class="lead">Flawless Victory!</p>
     </div>
 

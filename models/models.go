@@ -1,7 +1,7 @@
 package models
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
 	_ "github.com/mattn/go-sqlite3"
@@ -27,38 +27,38 @@ type Quiz struct {
 }
 
 func init() {
-	fmt.Println("Init Model")
 	orm.RegisterModel(new(User), new(Quiz))
 }
 
 func InitDb() {
 
+	beego.Info("Init DB")
+
 	o := orm.NewOrm()
+	//cnt, err := o.QueryTable("user").Count() // SELECT COUNT(*) FROM USER
 
-	cnt, err := o.QueryTable("user").Count() // SELECT COUNT(*) FROM USER
-	fmt.Printf("Count Num: %s, %s", cnt, err)
-
-	//if (cnt > 0) {
-	//	fmt.Println("Records found");
-	//	return
-	//}
+	runMod := beego.AppConfig.String("runmode")
+	if runMod != "dev" {
+		beego.Info("Init DB Prohibited - Not DEV run mod")
+		return
+	}
 
 	// Error.
-	err = orm.RunSyncdb("default", true, true)
+	err := orm.RunSyncdb("default", true, true)
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return
 	}
 
 	user1 := new(User)
 	user1.Email = beego.AppConfig.String("user1")
-	fmt.Println(o.Insert(user1))
+	o.Insert(user1)
 	fillQuizForUser(user1);
 
 
 	user2 := new(User)
 	user2.Email = beego.AppConfig.String("user2")
-	fmt.Println(o.Insert(user2))
+	o.Insert(user2)
 	fillQuizForUser(user2);
 
 	return
@@ -78,7 +78,7 @@ func FindActiveQuiz(id int, slug string) (quiz *Quiz, err error) {
 	err = qs.One(quiz)
 
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
@@ -98,7 +98,7 @@ func FindFailQuiz() (quiz *Quiz, err error) {
 	err = qs.One(quiz)
 
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
@@ -117,7 +117,7 @@ func fillQuizForUser(user * User)  {
 		//quiz.Step = 1 + 2 * i
 		quiz.Step = i+1
 
-		fmt.Println(o.Insert(quiz))
+		o.Insert(quiz)
 	}
 }
 
@@ -129,7 +129,7 @@ func UpdateQuizStatus(quiz * Quiz, status int)  {
 	if (status == QUIZ_STATUS_FAIL) {
 		quiz.Status = status
 		if num, err := o.Update(quiz); err == nil {
-			fmt.Println(num)
+			beego.Info("Updated rows = ", num)
 		}
 	}
 
@@ -139,7 +139,7 @@ func UpdateQuizStatus(quiz * Quiz, status int)  {
 			Filter("status", QUIZ_STATUS_ACTIVE).
 			Filter("user", quiz.User.Id).
 			Update(orm.Params{"status": QUIZ_STATUS_OK})
-		fmt.Printf("Affected Num: %s, %s", num, err)
+		beego.Info("Updated rows = ", num, err)
 	}
 
 
@@ -156,12 +156,11 @@ func getProgressBarData(user User) (quizList []*Quiz, err error) {
 	num , err := qs.All(&quizList)
 
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
 	if num == 0 {
-		fmt.Println(num)
 		return nil, err
 	}
 
@@ -206,13 +205,13 @@ func activateQuizForUser (user User) (quiz *Quiz, err error) {
 	err = qs.One(quiz)
 
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
 	quiz.Status = QUIZ_STATUS_ACTIVE
 	if num, err := o.Update(quiz); err == nil {
-		fmt.Println(num)
+		beego.Info("Updated rows = ", num, err)
 	}
 
 	return quiz, nil
@@ -227,10 +226,8 @@ func ActivateQuizForUsers() (quizList []*Quiz) {
 
 	err1 := o.Read(&user1, "Email")
 	if err1 == nil  {
-		quiz1, err := activateQuizForUser(user1)
+		quiz1, _ := activateQuizForUser(user1)
 		if quiz1 != nil {
-			fmt.Println(err)
-			fmt.Println(quiz1)
 			quizList = append(quizList, quiz1)
 		}
 	}
@@ -238,14 +235,10 @@ func ActivateQuizForUsers() (quizList []*Quiz) {
 	user2 := User{Email: beego.AppConfig.String("user2")}
 	err2 := o.Read(&user2, "Email")
 	if err2 == nil  {
-		//fmt.Println(err2)
-		//return nil, err2
 
-		quiz2, err := activateQuizForUser(user2)
+		quiz2, _ := activateQuizForUser(user2)
 
 		if quiz2 != nil {
-			fmt.Println(err)
-			fmt.Println(quiz2)
 			quizList = append(quizList, quiz2)
 		}
 	}
@@ -266,26 +259,26 @@ func GetQuizViewData() (data *QuizViewData, err error){
 
 	err = o.Read(&user1, "Email")
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
 	err = o.Read(&user2, "Email")
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
 
 	quizList1 , err  := getProgressBarData(user1)
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
 	quizList2 , err  := getProgressBarData(user2)
 	if err != nil {
-		fmt.Println(err)
+		beego.Warn(err)
 		return nil, err
 	}
 
