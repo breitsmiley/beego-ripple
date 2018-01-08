@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/static/favicon.ico">
 
-    <title>Total Recall</title>
+    <title>Total Recall - Choose Your Destiny!</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +26,7 @@
 <div class="container">
     <div class="page-header">
         <h1>Choose Your Destiny!</h1>
-        <p class="lead">Flawless Victory</p>
+        <p class="lead">Flawless Victory!</p>
     </div>
 
     <h3>Your Answer</h3>

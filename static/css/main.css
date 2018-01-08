@@ -1,3 +1,6 @@
+h1 a:hover {
+    text-decoration: none;
+}
 h4 {
     margin-top: 25px;
 }
@@ -9,7 +12,7 @@ hr {
 
 .mr-cat-wrapper {
     display: none;
-    position: fixed;
+    position: absolute;
 }
 
 .body-fail {
