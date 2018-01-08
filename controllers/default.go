@@ -31,6 +31,19 @@ func (c *MainController) Index() {
 
 }
 
+// @router /dev/fail [get]
+func (c *MainController) DevFail() {
+
+	data, err := models.GetQuizViewData()
+
+	if err != nil {
+		beego.Warn(err)
+		c.Abort("503")
+	}
+	c.Data["data"] = &data
+	c.TplName = "fail.html"
+}
+
 // @router /init/hde15knQw [get]
 func (c *MainController) InitDb() {
 
