@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"beego-ripple/models"
+	utils_mailer "beego-ripple/utils/mailer"
 )
 
 type MainController struct {
@@ -13,7 +14,6 @@ type MainController struct {
 func (c *MainController) Index() {
 
 	data, err := models.GetQuizViewData()
-
 	if err != nil {
 		beego.Warn(err)
 		c.Abort("503")
@@ -72,17 +72,18 @@ func (c *MainController) Quiz() {
 
 	// Common for GET and POST
 	//-----------------------
-	if (c.Ctx.Request.Method == "POST") {
+	if c.Ctx.Request.Method == "POST" {
 
 		btn := c.GetString("btn")
 
 		status := models.QUIZ_STATUS_OK
-		if (btn == "no") {
+		if btn == "no" {
 			status = models.QUIZ_STATUS_FAIL
 		}
 
-
 		models.UpdateQuizStatus(quiz, status)
+
+		utils_mailer.SendNoticeEmailToAll()
 
 		c.Redirect(c.URLFor("MainController.Index"), 302)
 	}

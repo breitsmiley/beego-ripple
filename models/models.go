@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
 	_ "github.com/mattn/go-sqlite3"
-	"beego-ripple/utils"
+	utils_string_helper "beego-ripple/utils/string_helper"
 )
 
 const QUIZ_STATUS_NEW  = 0
@@ -113,7 +113,7 @@ func fillQuizForUser(user * User)  {
 		quiz := new(Quiz)
 		quiz.User = user
 		quiz.Status = QUIZ_STATUS_NEW
-		quiz.Slug = utils.RandomString(10)
+		quiz.Slug = utils_string_helper.RandomString(10)
 		//quiz.Step = 1 + 2 * i
 		quiz.Step = i+1
 
@@ -141,9 +141,6 @@ func UpdateQuizStatus(quiz * Quiz, status int)  {
 			Update(orm.Params{"status": QUIZ_STATUS_OK})
 		beego.Info("Updated rows = ", num, err)
 	}
-
-
-
 
 }
 
