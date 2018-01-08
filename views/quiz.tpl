@@ -47,16 +47,17 @@
                 <div class="panel-heading"><h3 class="panel-title">NO</h3></div>
                 <div class="panel-body">
                     <form method="post" name="no">
+                        <div class="col-xs-1">
+                            <button type="submit" id="noBtn" name="btn" value="no" class="btn btn-danger btn-lg" disabled="disabled">NO</button>
+                        </div>
                         <div class="col-xs-11">
                             <div class="checkbox">
-                                <label class="pull-right" >
+                                <label>
                                     <input type="checkbox" id="enableNoBtnCheckbox" value="enable" aria-label="Activate NO button">Activate NO button
                                 </label>
                             </div>
                         </div>
-                        <div class="col-xs-1">
-                            <button type="submit" id="noBtn" name="btn" value="no" class="btn btn-danger pull-right" disabled="disabled">NO</button>
-                        </div>
+
                     </form>
                 </div>
             </div>
