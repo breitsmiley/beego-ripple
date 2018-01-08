@@ -10,10 +10,10 @@ WORKDIR /go/src/beego-ripple
 COPY . .
 
 
-RUN go get -u github.com/golang/dep/cmd/dep
+#RUN go get -u github.com/golang/dep/cmd/dep
 RUN go get -u github.com/beego/bee
 
-RUN dep ensure -vendor-only
+#RUN dep ensure -vendor-only
 
 RUN go-wrapper download
 RUN go-wrapper install

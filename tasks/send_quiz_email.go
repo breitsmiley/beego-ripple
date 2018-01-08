@@ -26,9 +26,7 @@ type QuizTplData struct {
 }
 
 func init() {
-
-
-	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 2 * * *", func() error {
+	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 30 4 */1 * *", func() error {
 		sendQuizEmailToAll()
 		return nil
 	})
