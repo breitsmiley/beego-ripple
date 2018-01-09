@@ -70,3 +70,5 @@ fabric.properties
 beego-ripple
 /logs/*.log
 
+/conf/ssl.crt
+/conf/ssl.key
