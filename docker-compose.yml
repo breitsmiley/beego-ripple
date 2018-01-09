@@ -5,9 +5,6 @@ services:
     build:
       context: .
       dockerfile: /docker/go/Dockerfile
-    ports:
-      - "8080:8080"
-      - "10443:10443"
     volumes:
       - type: bind
         source: .

@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  app-ripple-go:
+    ports:
+      - "8080:8080"
+      - "10443:10443"
+    command: ["bee", "run"]
