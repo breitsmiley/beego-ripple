@@ -83,7 +83,7 @@ func (c *MainController) Quiz() {
 
 		models.UpdateQuizStatus(quiz, status)
 
-		utils_mailer.SendNoticeEmailToAll()
+		utils_mailer.SendNoticeEmailToPartner(quiz.User.Email)
 
 		c.Redirect(c.URLFor("MainController.Index"), 302)
 	}

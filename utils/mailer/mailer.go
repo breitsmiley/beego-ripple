@@ -107,14 +107,27 @@ type NoticeTplData struct {
 	NoticeNum  int
 }
 
-func SendNoticeEmailToAll() {
+func SendNoticeEmailToPartner(userEmail string) {
 
 	appSiteName := beego.AppConfig.String("app_site_name")
 	appSiteSchema := beego.AppConfig.String("app_site_schema")
 	appSiteURL := beego.AppConfig.String("app_site_url")
 
-	user1 := beego.AppConfig.String("user1")
-	user2 := beego.AppConfig.String("user2")
+	user1Email := beego.AppConfig.String("user1")
+	user2Email := beego.AppConfig.String("user2")
+
+	if userEmail != user1Email && userEmail != user2Email {
+		beego.Warn("Wrong userEmail")
+		return
+	}
+
+	var partnerEmail string
+
+	if userEmail == user1Email {
+		partnerEmail = user2Email
+	} else {
+		partnerEmail = user1Email
+	}
 
 	data := new(NoticeTplData)
 	data.AppSiteName = appSiteName
@@ -123,7 +136,7 @@ func SendNoticeEmailToAll() {
 	data.Time = time.Now().Local().Format("02.01.2006 15:04")
 	data.NoticeNum = 1
 
-	to := []string{user1, user2}
+	to := []string{partnerEmail}
 	sendNoticeToEmail(to, data)
 }
 
