@@ -14,7 +14,7 @@ const TASK_SEND_QUIZ_EMAIL  = "send_quiz_email"
 
 func init() {
 	// 0 0 8 10 * *
-	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 0 */1 * * *", func() error {
+	first_task := toolbox.NewTask(TASK_SEND_QUIZ_EMAIL, "0 */5 * * * *", func() error {
 
 		beego.Info("Start Task - send_quiz_email");
 		utils_mailer.SendQuizEmailToAll()
